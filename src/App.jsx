@@ -9,7 +9,7 @@ import boxesApi from "./api/boxes";
 
 function App() {
   const [offers, setOffers] = useState([]);
-    const [result, setResult] = useState(null);
+  const [result, setResult] = useState(null);
 
   const params = {
     startDate: "2024-09-14",
@@ -23,8 +23,7 @@ function App() {
     try {
       const res = await reservationApi.get(3, params);
       const data = await res.json();
-            setResult(data);
-
+      setResult(data);
     } catch (error) {
       console.log(error);
     }
@@ -138,12 +137,12 @@ function App() {
             <button onClick={() => postReservations()} className="btn">
               postReservations
             </button>
-           
+
             <button onClick={() => loginUser()} className="btn">
               login User
             </button>
             <button onClick={() => addBoxes()} className="btn">
-              add  some boxes
+              add some boxes
             </button>
             <button onClick={() => changeStatus()} className="btn">
               change status
