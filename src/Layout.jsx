@@ -8,13 +8,11 @@ const Layout = () => {
 
   // List of paths where FooterNav should not be shown
   const noFooterPaths = [
-    "/",
-    "/login",
-    "/register",
-    "/reservations",
-    "/reservations/:id",
-    "/offers",
-    "//offers/:id",
+    "/homePageLover",
+    "/offers-detail",
+    "/offerslover",
+    "/reservation-detail",
+    "/reservation-list",
   ];
 
   return (
@@ -23,7 +21,7 @@ const Layout = () => {
       <Outlet />{" "}
       {/* Outlet will render the child components based on the route */}
       {/* Conditionally render FooterNav */}
-      {!noFooterPaths.includes(location.pathname) && <FooterNav />}
+      {noFooterPaths.includes(location.pathname) && <FooterNav />}
     </>
   );
 };

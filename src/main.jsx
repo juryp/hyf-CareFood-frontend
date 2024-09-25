@@ -6,7 +6,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import RecipesPage from "./RecipesPage.jsx";
 import Navigation from "./components/Navbar/NavBar.jsx";
 import Login from "./components/Login/Login.jsx";
-import Register from "./components/Registeration/Register.jsx";
+import Register from "./components/Registration/Register.jsx";
 import Reservations from "./pages/Reservations.jsx";
 import ReservationDetails from "./pages/ReservationDetails.jsx";
 import Offers from "./pages/Offers.jsx";
@@ -15,13 +15,13 @@ import ReservationListPage from "./foodLover/reservationpart/ReservationListPage
 import OffersListFunction from "./foodLover/offersFunc/OffersListFunction.jsx";
 import OffersDetailListFunction from "./foodLover/offersFunc/OffersDetailListFunction.jsx";
 import MakeReservation from "./foodLover/offersFunc/MakeReservation.jsx";
-import OfferTotal from "./foodLover/HomeLOver/OfferTotalFunc.jsx";
 import FooterNav from "./foodLover/FooterNavLover/FooterNavLover.jsx";
 import HomePageLover from "./foodLover/HomeLOver/HomePageLover.jsx";
-import ReservedList from "./foodLover/HomeLOver/ReservedListFunc.jsx";
 import Layout from "./Layout.jsx";
 import ReservationDetailPage from "./foodLover/reservationpart/ReservationDetailListPage.jsx";
-import ReservedDetailPage from "./foodLover/HomeLOver/ReservedDetailPage.jsx";
+import CreateOffer from "./components/Create-offer/CreateOffer.jsx";
+
+
 
 const router = createBrowserRouter([
   {
@@ -36,16 +36,14 @@ const router = createBrowserRouter([
       { path: "/reservations/:id", element: <ReservationDetails /> }, // Food provider reservation details page
       { path: "/offers", element: <Offers /> }, // Food provider offers page
       { path: "/offers/:id", element: <OfferDetails /> }, // Food provider offer details page
+      { path: "/Offer", element : <CreateOffer /> }, // Food provider create offers page
       { path: "/reservation-list", element: <ReservationListPage /> },
-      { path: "/reserved-detail", element: <ReservedDetailPage /> },
       { path: "/reservation-detail", element: <ReservationDetailPage /> },
       { path: "/offerslover", element: <OffersListFunction /> },
       { path: "/offers-detail", element: <OffersDetailListFunction /> },
       { path: "/make-reservation", element: <MakeReservation /> },
-      { path: "/offersTotal", element: <OfferTotal /> },
       { path: "/foodLoverNav", element: <FooterNav /> },
-      { path: "/homePageLover", element: <HomePageLover /> }, // Combined layout page
-      { path: "/foodLoverNav", element: <ReservedList /> },
+      { path: "/homePageLover", element: <HomePageLover /> }      
     ],
   },
 ]);
