@@ -8,6 +8,7 @@ const HomePageLover = () => {
   const [offers, setOffers] = useState([]);
   const [reservations, setReservations] = useState([]);
   const navigate = useNavigate();
+  const [user, setUser] = useState();
 
   // Function to fetch offers
   const handleOffers = async () => {
@@ -57,10 +58,16 @@ const HomePageLover = () => {
     navigate('/reservation-detail', { state: { reservation } });
   };
 
+  useEffect(() => {
+    if (localStorage.getItem('user')){
+      setUser(JSON.parse(localStorage.getItem('user')))
+    }
+  }, []);
+
   return (
     <div className="homepage-lover">
       <div className="offers-summary">
-        <h2>Welcome, :foodlover.name!</h2>
+        <h2>Welcome, :{user?user.login:null}!</h2>
         <p>Today</p>
         <div className="offers-totals">
           <div><strong>{totalProviders}</strong> offers</div>
