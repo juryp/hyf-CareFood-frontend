@@ -1,7 +1,9 @@
 import  { useState } from 'react';
+import { useNavigate } from 'react-router';
 
 
 const CreateOffer = () => {
+  const navigate = useNavigate()
   const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
   const [offer, setOffer] = useState({
     name: '',
@@ -43,16 +45,16 @@ const CreateOffer = () => {
   };
 
   // Handle form cancellation
-  const handleCancel = () => {
+  //const handleCancel = () => {
     // Reset form and errors
-    setOffer({
-      name: '',
-      description: '',
-      date: today,
-      quantity: 1
-    });
-    setErrors({});
-  };
+   // setOffer({
+      //name: '',
+      //description: '',
+     // date: today,
+      //quantity: 1
+    //});
+    //setErrors({});
+  //};
 
   // Handle form input changes
   const handleChange = (e) => {
@@ -119,7 +121,7 @@ const CreateOffer = () => {
         </div>
 
         <button type="submit" className="btn btn-primary me-2">Create</button>
-        <button type="button" className="btn btn-secondary" onClick={handleCancel}>Cancel</button>
+        <button type="button" className="btn btn-secondary" onClick={()=>navigate('/offers')}>Cancel</button>
       </form>
     </div>
   );
