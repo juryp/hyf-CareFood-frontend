@@ -32,9 +32,11 @@ const ReservationDetails = () => {
   const updateStatus = () => {
     if (reservations.status === "Reserved") {
       setReservations((prev) => ({ ...prev, status: "Ready for Pickup" }));
-    } else if (reservations.status === "Ready for Pickup") {
-      setReservations((prev) => ({ ...prev, status: "Delivered" }));
     }
+  };
+
+  const updateStatus2 = () => {
+    setReservations((prev) => ({ ...prev, status: "Delivered" }));
   };
 
   const handleButtonText = () => {
@@ -47,7 +49,7 @@ const ReservationDetails = () => {
       );
     } else if (reservations.status === "Ready for Pickup") {
       return (
-        <button onClick={updateStatus} className="status">
+        <button onClick={updateStatus2} className="status">
           {" "}
           Delivered{" "}
         </button>
@@ -95,7 +97,7 @@ const ReservationDetails = () => {
           <p> status </p>
         </div>
       </div>
-      <div>{handleButtonText()}</div>
+      <div className="button-container">{handleButtonText()}</div>
       <div className="footer">
         <div onClick={() => navigate("/reservations")}>
           <img src={reservation_icon} />
