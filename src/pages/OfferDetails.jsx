@@ -39,10 +39,14 @@ const OfferDetails = () => {
         <div>
           <img onClick={() => navigate("/offers")} src={back_icon} />
         </div>
-        <p> Update </p>
+        <p onClick={() => navigate("/Offer-update")}> Update </p>
       </div>
       {providerOffers.map((offer, index) => (
         <div className="offers-description" key={index}>
+          <div className="offer-date">
+            {" "}
+            <strong>Date:</strong> {offer.date}{" "}
+          </div>
           <div>
             <h2 className="text-uppercase"> Standard </h2>
             <p className="text-sm"> {offer.standard_description} </p>
