@@ -155,7 +155,7 @@ const CreateOffer = () => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="pickupTime" className="form-label">Pickup Time</label>
+          <label htmlFor="pickupTime" className="form-label"> Pickup Time </label>
           <input
             type="time"
             id="pickupTime"

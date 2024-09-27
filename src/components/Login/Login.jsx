@@ -24,7 +24,6 @@ const Login = () => {
           localStorage.setItem('user',JSON.stringify(res.data))
         }
         if (res.data.role==="provider"){
-
           navigate('/offers')
         }
         if (res.data.role==="user"){
