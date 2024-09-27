@@ -6,13 +6,13 @@ import "./offerUpdate.css";
 
 const UpdateOfferForm = () => {
   const [offer, setOffer] = useState({
-    name: '',            
+    name: '',            // Initialize name
     description: '',
     pickup_time: "17:00:00",
     startDate: "2024-09-14",
     endDate: "2024-09-14",
-    boxType: "Standard", 
-    quantity: 1,         
+    boxType: "Standard", // Default box type
+    quantity: 1,         // Initialize quantity
   });
 
   const [boxes, setBoxes] = useState([]);
@@ -96,11 +96,11 @@ const UpdateOfferForm = () => {
     setOffer({
       name: '',
       description: '',
-      startDate: "2024-09-14", 
-      endDate: "2024-09-14", 
-      boxType: 'Standard', 
-      pickup_time: "17:00:00", 
-      quantity: 1, 
+      startDate: "2024-09-14", // Reset to default
+      endDate: "2024-09-14", // Reset to default
+      boxType: 'Standard', // Reset box type to default
+      pickup_time: "17:00:00", // Reset pickup time to default
+      quantity: 1, // Reset quantity to default
     });
     alert('Offer update canceled');
     navigate("/"); 
@@ -147,7 +147,7 @@ const UpdateOfferForm = () => {
           name="quantity"
           value={offer.quantity}
           onChange={handleInputChange}
-          min="1"
+          min="1" // Minimum quantity is 1
           required
         />
       </Form.Group>

@@ -35,7 +35,7 @@ const Offers = () => {
     <div className="content">
       <div className="title-wrapper">
         <h2 className="heading"> Offers - Food Provider </h2>
-        <p> New Offer </p>
+        <p onClick={() => navigate("/Offer")}> New Offer </p>
       </div>
       <div>
         <ul>

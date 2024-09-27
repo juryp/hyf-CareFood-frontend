@@ -13,11 +13,11 @@ function App() {
   };
   useEffect(() => {
     getOffers();
-     
-     const intervalId = setInterval(getOffers, 10000); // 10 seconds
+
+    const intervalId = setInterval(getOffers, 10000); // 10 seconds
 
     return () => clearInterval(intervalId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const getOffers = async () => {
     try {
@@ -25,7 +25,6 @@ function App() {
       const offer = await res.json();
       setOffers(offer);
       console.log(offer);
-      
     } catch (error) {
       console.log(error);
     }
@@ -37,7 +36,9 @@ function App() {
         <div className="title">
           <div className="sub-title">
             <h2 className="text-center-title">Rescue Food, Fight Waste</h2>
-            <h3 className="text-center-title">Join us and help feed the world </h3>
+            <h3 className="text-center-title">
+              Join us and help feed the world{" "}
+            </h3>
           </div>
           <Image
             className="title-image"
@@ -46,9 +47,7 @@ function App() {
         </div>
 
         <Row>
-        
           <h1 className="text-center-title">CareFood</h1>
-         
         </Row>
 
         <ListOfFoods offers={offers} />

@@ -19,10 +19,14 @@ const Login = () => {
 
     axios.post("http://cfood.obereg.net:5000/auth/login", {login:data.email,password:data.password})
       .then(res=>{ 
-        if (res.data.role=="provider"){
+        console.log (res)
+        if (res.data.id){
+          localStorage.setItem('user',JSON.stringify(res.data))
+        }
+        if (res.data.role==="provider"){
           navigate('/offers')
         }
-        if (res.data.role=="user"){
+        if (res.data.role==="user"){
           navigate('/homePageLover')// i have to change to food lover reservation
         }
         
