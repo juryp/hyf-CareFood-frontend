@@ -138,7 +138,7 @@ console.log("Offer details:", offer);
             ))}
         </select>
 
-        <label>Pickup Time</label>
+        {/* <label>Pickup Time</label>
         <select
           value={pickupTime}
           onChange={(e) => setPickupTime(e.target.value)}
@@ -146,7 +146,7 @@ console.log("Offer details:", offer);
           <option value="12:00">12:00</option>
           <option value="13:00">13:00</option>
           <option value="14:00">14:00</option>
-        </select>
+        </select> */}
       </div>
 
       <div className="reservation-actions">
