@@ -67,7 +67,8 @@ const UpdateOfferForm = () => {
       "Standard": 1,
       "Vegan": 2,
       "Gluten-Free": 3,
-      "Diabetic": 4, };
+      "Diabetic": 4,
+     };
 
     const requestData = {
       provider_id: 3, 
