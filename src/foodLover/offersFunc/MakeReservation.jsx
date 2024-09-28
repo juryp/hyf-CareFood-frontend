@@ -3,7 +3,6 @@ import { useState } from "react";
 import "./makeReservation.css";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-// Assuming you have a CSS file for styling
 
 const MakeReservation = () => {
   const { state: offer } = useLocation(); // Get the offer details passed via state
@@ -14,34 +13,39 @@ const MakeReservation = () => {
     description: offer?.standard_description || "", // Default description
     boxType: "Standard", // Default box type
   });
+
+  // Get today's date in YYYY-MM-DD format
+  const today = new Date().toISOString().split("T")[0];
+  const [reservationDate, setReservationDate] = useState(today); // Default to today's date
+
+  const handleDateChange = (e) => {
+    setReservationDate(e.target.value); // Update the reservation date
+  };
+
   // Get the user from localStorage
   const user = JSON.parse(localStorage.getItem("user")); // Retrieve user data
+
   // Update the offer description when box type is changed
   const handleInputChange = (event) => {
     const { name, value } = event.target;
 
-    if (name === "boxType") {
-      let description = "";
-      if (value === "Standard") {
-        description = offer?.standard_description;
-      } else if (value === "Vegan") {
-        description = offer?.vegan_description;
-      } else if (value === "Diabetic") {
-        description = offer?.diabetic_description;
-      }
-      setOffers({
-        ...offers, // Ensures other properties are preserved
-        boxType: value,
-        description: description,
-      });
+    let description = "";
+    if (value === "Standard") {
+      description = offer?.standard_description;
+    } else if (value === "Vegan") {
+      description = offer?.vegan_description;
+    } else if (value === "Diabetic") {
+      description = offer?.diabetic_description;
     }
+
+    setOffers({
+      ...offers, // Ensures other properties are preserved
+      boxType: value,
+      description: description,
+    });
   };
 
-  console.log("Offer details:", offer);
-  
-
   // Function to handle reservation confirmation and sending the data to the server
-
   const handleConfirm = async () => {
     try {
       const box_id =
@@ -50,15 +54,14 @@ const MakeReservation = () => {
           : offers.boxType === "Diabetic"
           ? 3
           : 2;
-    
+
       const reservationData = {
         user_id: user?.id,
         provider_id: offer?.provider_id,
         box_id: box_id,
-        date: offer?.date || "2024-09-14",
+        date: reservationDate, // Use the selected date
         quantity: quantity,
       };
-console.log(user?.id);
 
       const response = await axios.post(
         "http://cfood.obereg.net:5000/reservations/",
@@ -126,15 +129,13 @@ console.log(user?.id);
             ))}
         </select>
 
-        {/* <label>Pickup Time</label>
-        <select
-          value={pickupTime}
-          onChange={(e) => setPickupTime(e.target.value)}
-        >
-          <option value="12:00">12:00</option>
-          <option value="13:00">13:00</option>
-          <option value="14:00">14:00</option>
-        </select> */}
+        <label>Select Date:</label>
+        <input
+          type="date"
+          value={reservationDate}
+          onChange={handleDateChange}
+          min={today} // Disable past dates
+        />
       </div>
 
       <div className="reservation-actions">
