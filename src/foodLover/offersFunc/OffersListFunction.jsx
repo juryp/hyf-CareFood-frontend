@@ -1,15 +1,18 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import offersApi from '../../api/offers.js';
-import './offersListFunction.css';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import offersApi from "../../api/offers.js";
+import "./offersListFunction.css";
 
 const OffersListFunction = () => {
   const [offers, setOffers] = useState([]);
   const navigate = useNavigate();
 
+  // Get today's date in YYYY-MM-DD format
+  const today = new Date().toISOString().split("T")[0];
+
   const params = {
-    startDate: "2024-09-14",
-    endDate: "2024-09-14",
+    startDate: today, // Set startDate to today's date
+    endDate: today, // Set endDate to today's date
   };
 
   const handleOffers = async () => {
@@ -27,7 +30,7 @@ const OffersListFunction = () => {
   }, []);
 
   const handleOfferClick = (offer) => {
-    navigate('/offers-detail', { state: offer });  // Navigate to the Offer Detail page
+    navigate("/offers-detail", { state: offer }); // Navigate to the Offer Detail page
   };
 
   return (
@@ -36,10 +39,17 @@ const OffersListFunction = () => {
       {offers.length > 0 && <h3>{offers[0].date}</h3>}
       <ul>
         {offers.map((offer, index) => (
-          <li key={index} className="offer-item" onClick={() => handleOfferClick(offer)}>
+          <li
+            key={index}
+            className="offer-item"
+            onClick={() => handleOfferClick(offer)}
+          >
             <div>
               <h2>{offer.provider_name}</h2>
-              <p>{offer.standard_unit} standard units, {offer.vegan_unit} vegan units, {offer.diabetic_unit} diabetic units left</p>
+              <p>
+                {offer.standard_unit} standard units, {offer.vegan_unit} vegan
+                units, {offer.diabetic_unit} diabetic units left
+              </p>
             </div>
           </li>
         ))}
