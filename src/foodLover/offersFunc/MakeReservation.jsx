@@ -50,21 +50,13 @@ const MakeReservation = () => {
           : offers.boxType === "Diabetic"
           ? 3
           : 2;
-      let updatedQuantity = quantity;
-      if (box_id === 1) {
-        updatedQuantity = offer?.standard_unit || 1;
-      } else if (box_id === 3) {
-        updatedQuantity = offer?.diabetic_unit || 1;
-      } else if (box_id === 2) {
-        updatedQuantity = offer?.vegan_unit || 1;
-      }
-
+    
       const reservationData = {
         user_id: user?.id,
         provider_id: offer?.provider_id,
         box_id: box_id,
         date: offer?.date || "2024-09-14",
-        quantity: updatedQuantity,
+        quantity: quantity,
       };
 console.log(user?.id);
 
