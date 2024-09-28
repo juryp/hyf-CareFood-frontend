@@ -81,7 +81,7 @@ const UpdateOfferForm = () => {
       const response = await axios.put('http://cfood.obereg.net:5000/boxes/add-boxes', requestData);
       if (response.status === 200) {
         alert('Offer updated successfully!');
-        navigate("/"); // Redirect after successful update
+        navigate("/offers"); // Redirect after successful update
       } else {
         alert('Something went wrong. Please try again.');
       }
