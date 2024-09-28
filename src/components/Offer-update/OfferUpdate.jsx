@@ -61,37 +61,49 @@ const UpdateOfferForm = () => {
   // Handle the form submission with PUT request
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    // Ensure that Diabetic is mapped correctly here
+  
     const boxTypeMap = {
       "Standard": 1,
       "Vegan": 2,
-      "Gluten-Free": 3,
-      "Diabetic": 4,
-     };
-
+      "Diabetic": 3,
+      };
+  
     const requestData = {
-      provider_id: 3, 
-      date: offer.startDate, 
-      type: boxTypeMap[offer.boxType] || 1,
+      provider_id: 3, // Assuming provider ID is 3
+      date: offer.startDate, // Using start date from the form
+      type: boxTypeMap[offer.boxType] || 1, // Map box type to the correct value
       quantity: offer.quantity,
       description: offer.description,
-      pickup_time: offer.pickup_time, 
+      pickup_time: offer.pickup_time, // From the form
     };
-
+  
     try {
       const response = await axios.put('http://cfood.obereg.net:5000/boxes/add-boxes', requestData);
       if (response.status === 200) {
         alert('Offer updated successfully!');
-        navigate("/"); 
+        navigate("/"); // Redirect after successful update
       } else {
         alert('Something went wrong. Please try again.');
       }
     } catch (error) {
-      console.error('Error updating the offer:', error);
-      alert('An error occurred. Please try again.');
+      if (error.response) {
+        // Backend responded with an error
+        console.error('Response error:', error.response.data);
+        console.error('Response status:', error.response.status);
+        console.error('Response headers:', error.response.headers);
+        alert(`Error: ${error.response.data.message || 'Unknown server error.'}`);
+      } else if (error.request) {
+        // Request was made but no response received
+        console.error('No response received:', error.request);
+        alert('No response from server. Please try again later.');
+      } else {
+        // Other errors (such as setting up the request)
+        console.error('Error setting up request:', error.message);
+        alert(`Error: ${error.message}`);
+      }
     }
   };
+  
 
   const handleCancel = () => {
     setOffer({
