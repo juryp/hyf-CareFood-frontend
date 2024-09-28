@@ -119,7 +119,7 @@ const UpdateOfferForm = () => {
           value={offer.boxType}
           onChange={handleInputChange}
           required >
-            
+
           {boxes.map((box) => (
             <option key={box.type} value={box.type}>{box.type}</option>
           ))}
@@ -160,8 +160,7 @@ const UpdateOfferForm = () => {
           name="startDate"
           value={offer.startDate}
           onChange={handleInputChange}
-          required
-        />
+          required />
       </Form.Group>
 
       <Form.Group controlId="formOfferEndDate" className="mb-3">
@@ -171,8 +170,7 @@ const UpdateOfferForm = () => {
           name="endDate"
           value={offer.endDate}
           onChange={handleInputChange}
-          required
-        />
+          required />
       </Form.Group>
 
       <div className="form-actions d-flex justify-content-between">
