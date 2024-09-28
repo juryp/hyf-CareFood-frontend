@@ -6,7 +6,7 @@ const api = {
     return http.get(`/reservations/provider/${id}${query}`);
   },
   post: (data) => {
-    return http.post(`/reservations/`, data);
+    return http.post(`/reservations/${data}`);
   },
   getUser: (id, inputQuery) => {
     const query = queryString(inputQuery);
