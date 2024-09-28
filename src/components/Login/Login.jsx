@@ -23,11 +23,10 @@ const Login = () => {
         if (res.data.id){
           localStorage.setItem('user',JSON.stringify(res.data))
         }
-        if (res.data.role=="provider"){
-
+        if (res.data.role==="provider"){
           navigate('/offers')
         }
-        if (res.data.role=="user"){
+        if (res.data.role==="user"){
           navigate('/homePageLover')// i have to change to food lover reservation
         }
         

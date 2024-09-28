@@ -13,6 +13,7 @@ const Reservations = () => {
   const params = {
     startDate: "2024-09-14",
     endDate: "2024-09-14",
+    Issue: true,
   };
 
   const navigate = useNavigate();
@@ -50,6 +51,7 @@ const Reservations = () => {
   });
 
   useEffect(() => {
+    console.log("updated");
     const reserved = reservations.filter(
       (item) => item.status === "Reserved"
     ).length;
@@ -59,7 +61,7 @@ const Reservations = () => {
     const delivered = reservations.filter(
       (item) => item.status === "Delivered"
     ).length;
-
+    console.log("updated2", reserved, ready, delivered);
     setReservedCount(reserved);
     setReadyCount(ready);
     setDeliveredCount(delivered);

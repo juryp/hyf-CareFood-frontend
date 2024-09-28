@@ -1,20 +1,22 @@
-import { useState, useEffect } from "react"; // Correctly import from 'react'
+import { useState, useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router";
-import "./offerUpdate.css"; // Assuming you have the CSS
+import "./offerUpdate.css";
 
 const UpdateOfferForm = () => {
   const [offer, setOffer] = useState({
+    name: '',            // Initialize name
     description: '',
     pickup_time: "17:00:00",
     startDate: "2024-09-14",
     endDate: "2024-09-14",
     boxType: "Standard", // Default box type
+    quantity: 1,         // Initialize quantity
   });
 
-  const [boxes, setBoxes] = useState([]); // State to hold box types
-  const navigate = useNavigate(); // Initialize useNavigate
+  const [boxes, setBoxes] = useState([]);
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchOfferData = async () => {
@@ -23,7 +25,7 @@ const UpdateOfferForm = () => {
         const data = response.data;
 
         if (data && data.boxes && data.boxes.length > 0) {
-          setBoxes(data.boxes); // Store all box types
+          setBoxes(data.boxes);
           const standardBox = data.boxes.find(box => box.type === 'Standard');
           if (standardBox) {
             setOffer(prevOffer => ({
@@ -45,7 +47,6 @@ const UpdateOfferForm = () => {
     const { name, value } = event.target;
     setOffer({ ...offer, [name]: value });
 
-    // Update the description when box type changes
     if (name === "boxType") {
       const selectedBox = boxes.find(box => box.type === value);
       if (selectedBox) {
@@ -57,11 +58,37 @@ const UpdateOfferForm = () => {
     }
   };
 
-  const handleSubmit = (event) => {
+  // Handle the form submission with PUT request
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('Offer submitted:', offer);
-    alert('Offer updated successfully!');
-    navigate("/"); // Redirect after successful submission
+
+    const boxTypeMap = {
+      "Standard": 1,
+      "Vegan": 2,
+      "Gluten-Free": 3,
+      // Add other types if needed, based on your backend's box type mappings
+    };
+
+    const requestData = {
+      provider_id: 3, // Assuming provider ID is 3
+      date: offer.startDate, // Using start date from the form
+      type: boxTypeMap[offer.boxType] || 1, // Map box type to the correct value
+      quantity: offer.quantity,
+      description: offer.description,
+      pickup_time: offer.pickup_time, // From the form
+    };
+    try {
+      const response = await axios.put('http://cfood.obereg.net:5000/boxes/add-boxes', requestData);
+      if (response.status === 200) {
+        alert('Offer updated successfully!');
+        navigate("/"); // Redirect after successful update
+      } else {
+        alert('Something went wrong. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error updating the offer:', error);
+      alert('An error occurred. Please try again.');
+    }
   };
 
   const handleCancel = () => {
@@ -72,9 +99,10 @@ const UpdateOfferForm = () => {
       endDate: "2024-09-14", // Reset to default
       boxType: 'Standard', // Reset box type to default
       pickup_time: "17:00:00", // Reset pickup time to default
+      quantity: 1, // Reset quantity to default
     });
     alert('Offer update canceled');
-    navigate("/"); // Redirect after canceling
+    navigate("/"); 
   };
 
   return (
@@ -96,7 +124,6 @@ const UpdateOfferForm = () => {
         </Form.Control>
       </Form.Group>
 
-
       <Form.Group controlId="formOfferDescription" className="mb-3">
         <Form.Label>Description <span className="mandatory">*</span></Form.Label>
         <Form.Control
@@ -112,6 +139,17 @@ const UpdateOfferForm = () => {
         </Form.Text>
       </Form.Group>
 
+      <Form.Group controlId="formOfferQuantity" className="mb-3">
+        <Form.Label>Quantity <span className="mandatory">*</span></Form.Label>
+        <Form.Control
+          type="number"
+          name="quantity"
+          value={offer.quantity}
+          onChange={handleInputChange}
+          min="1" // Minimum quantity is 1
+          required/>
+      </Form.Group>
+
       <Form.Group controlId="formOfferStartDate" className="mb-3">
         <Form.Label>Start Date <span className="mandatory">*</span></Form.Label>
         <Form.Control
@@ -119,8 +157,7 @@ const UpdateOfferForm = () => {
           name="startDate"
           value={offer.startDate}
           onChange={handleInputChange}
-          required
-        />
+          required/>
       </Form.Group>
 
       <Form.Group controlId="formOfferEndDate" className="mb-3">
@@ -130,8 +167,7 @@ const UpdateOfferForm = () => {
           name="endDate"
           value={offer.endDate}
           onChange={handleInputChange}
-          required
-        />
+          required/>
       </Form.Group>
 
       <div className="form-actions d-flex justify-content-between">
