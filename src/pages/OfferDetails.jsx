@@ -11,10 +11,15 @@ const OfferDetails = () => {
   const navigate = useNavigate();
   const [providerOffers, setProviderOffers] = useState([]);
   const { id } = useParams();
+  const today = new Date().toISOString().split("T")[0];
   const params = {
-    startDate: "2024-09-14",
-    endDate: "2024-09-14",
+    startDate: today,
+    endDate: today,
   };
+  // const params = {
+  //   startDate: "2024-09-14",
+  //   endDate: "2024-09-14",
+  // };
 
   const handleOfferDetails = async () => {
     try {
