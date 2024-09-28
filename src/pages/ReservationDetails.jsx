@@ -17,7 +17,7 @@ const ReservationDetails = () => {
 
   const handleReservationDetails = async () => {
     try {
-      const response = await api.get(3, params);
+      const response = await api.get(3, { params });
       const data = await response.json();
       data.map((r) => {
         if (r.id.toString() === id) {
@@ -25,31 +25,62 @@ const ReservationDetails = () => {
         }
       });
     } catch (error) {
-      return `There is an error fetching the reservation details`, error;
+      console.error(error);
     }
   };
 
-  const updateStatus = () => {
-    if (reservations.status === "Reserved") {
-      setReservations((prev) => ({ ...prev, status: "Ready for Pickup" }));
-    }
+  const handleReadyStatus = async () => {
+    console.log("handle", id);
+    await api.post(
+      `ready/${id}`
+      // params, http://cfood.obereg.net:5000/reservations/ready/104
+      // {
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      // }
+    );
+    // setReservations(response.data);
   };
 
-  const updateStatus2 = () => {
-    setReservations((prev) => ({ ...prev, status: "Delivered" }));
+  const handleDeliveredStatus = async () => {
+    await api.post(
+      `issue/${id}`
+      //   params,
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //   }
+    );
+    // setReservations(response.data);
   };
+
+  // const updateStatus = () => {
+  //   console.log("status", reservations);
+  //   if (reservations.status === "Reserved") {
+  //     setReservations((prev) => ({ ...prev, status: "Ready for Pickup" }));
+  //     handleReadyStatus();
+  //     console.log("status2", reservations);
+  //   }
+  // };
+
+  // const updateStatus2 = () => {
+  //   setReservations((prev) => ({ ...prev, status: "Delivered" }));
+  //   handleDeliveredStatus();
+  // };
 
   const handleButtonText = () => {
     if (reservations.status === "Reserved") {
       return (
-        <button onClick={updateStatus} className="status">
+        <button onClick={handleReadyStatus} className="status">
           {" "}
           Ready for pickup{" "}
         </button>
       );
     } else if (reservations.status === "Ready for Pickup") {
       return (
-        <button onClick={updateStatus2} className="status">
+        <button onClick={handleDeliveredStatus} className="status">
           {" "}
           Delivered{" "}
         </button>
@@ -61,7 +92,7 @@ const ReservationDetails = () => {
 
   useEffect(() => {
     handleReservationDetails();
-  }, []);
+  }, [handleReadyStatus, handleDeliveredStatus]);
 
   return (
     <div className="content">
