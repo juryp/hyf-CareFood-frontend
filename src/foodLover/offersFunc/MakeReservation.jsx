@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "./makeReservation.css";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 // Assuming you have a CSS file for styling
 
 const MakeReservation = () => {
@@ -13,6 +14,8 @@ const MakeReservation = () => {
     description: offer?.standard_description || "", // Default description
     boxType: "Standard", // Default box type
   });
+  // Get the user from localStorage
+  const user = JSON.parse(localStorage.getItem("user")); // Retrieve user data
   // Update the offer description when box type is changed
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -34,72 +37,65 @@ const MakeReservation = () => {
     }
   };
 
-console.log("Offer details:", offer);
+  console.log("Offer details:", offer);
+  
 
   // Function to handle reservation confirmation and sending the data to the server
 
   const handleConfirm = async () => {
     try {
-
-       console.log("Available Standard Boxes:", offer?.standard_unit || 0);
-       console.log("Available Diabetic Boxes:", offer?.diabetic_unit || 0);
-       console.log("Available Vegan Boxes:", offer?.vegan_unit || 0);
-
-      // Determine box_id based on the selected box type
       const box_id =
         offers.boxType === "Standard"
           ? 1
           : offers.boxType === "Diabetic"
           ? 3
-          : 2; // Box type ID for Standard, Diabetic, and Vegan
-
-      // Apply logic based on box_id
+          : 2;
       let updatedQuantity = quantity;
       if (box_id === 1) {
-        updatedQuantity = offer?.standard_unit || 1; // Assign standard_unit if box_id is 1
+        updatedQuantity = offer?.standard_unit || 1;
       } else if (box_id === 3) {
-        updatedQuantity = offer?.diabetic_unit || 1; // Assign diabetic_unit if box_id is 2
+        updatedQuantity = offer?.diabetic_unit || 1;
       } else if (box_id === 2) {
-        updatedQuantity = offer?.vegan_unit || 1; // Assign vegan_unit if box_id is 3
+        updatedQuantity = offer?.vegan_unit || 1;
       }
 
-      // Log the reservation data to inspect
       const reservationData = {
-        user_id: 2, 
-        provider_id: offer?.provider_id, 
+        user_id: user?.id,
+        provider_id: offer?.provider_id,
         box_id: box_id,
-        date: offer?.date || "2024-09-14", 
-        quantity: updatedQuantity, 
+        date: offer?.date || "2024-09-14",
+        quantity: updatedQuantity,
       };
+console.log(user?.id);
 
-      console.log("Reservation Data:", reservationData); // Debugging log
-
-      // Sending reservation data to the backend (adjust the URL as per your API)
       const response = await axios.post(
         "http://cfood.obereg.net:5000/reservations/",
         reservationData
       );
 
-      const data = response.data;
       if (response.status >= 200 && response.status < 300) {
-        console.log("Reservation successfully created:", data);
-        // Redirect the user back to the reservation list page
-        navigate("/reservation-list");
+        console.log("Reservation successfully created:", response.data);
+        toast.success("Reservation successfully created!");
+
+        // Delay navigation to show the toast for 3 seconds (3000 ms)
+        setTimeout(() => {
+          navigate("/reservation-list");
+        }, 3000); // Wait 3 seconds before navigating
       } else {
-        console.error("Error creating reservation:", data.message);
+        console.error("Error creating reservation:", response.data.message);
       }
     } catch (error) {
-      // Log the error response for more information
       console.error("Network error while creating reservation:", error);
       if (error.response) {
-        console.log("Server Response:", error.response.data); // This shows more detailed error message from the server
+        console.log("Server Response:", error.response.data);
+        toast.error("Not enough boxes available for reservation!");
       }
     }
   };
 
-
   return (
     <div className="make-reservation">
+      <ToastContainer position="top-center" />
       <h1>Make a reservation for {offer?.provider_name}</h1>
       <p>{offers.description}</p>
 
