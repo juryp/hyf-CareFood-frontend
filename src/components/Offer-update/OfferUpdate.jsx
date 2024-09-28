@@ -62,10 +62,12 @@ const UpdateOfferForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    // Ensure that Diabetic is mapped correctly here
     const boxTypeMap = {
       "Standard": 1,
       "Vegan": 2,
       "Gluten-Free": 3,
+      "Diabetic": 4,  // Ensure Diabetic is mapped correctly
       // Add other types if needed, based on your backend's box type mappings
     };
 
@@ -77,6 +79,7 @@ const UpdateOfferForm = () => {
       description: offer.description,
       pickup_time: offer.pickup_time, // From the form
     };
+
     try {
       const response = await axios.put('http://cfood.obereg.net:5000/boxes/add-boxes', requestData);
       if (response.status === 200) {
@@ -147,7 +150,8 @@ const UpdateOfferForm = () => {
           value={offer.quantity}
           onChange={handleInputChange}
           min="1" // Minimum quantity is 1
-          required/>
+          required
+        />
       </Form.Group>
 
       <Form.Group controlId="formOfferStartDate" className="mb-3">
@@ -157,7 +161,8 @@ const UpdateOfferForm = () => {
           name="startDate"
           value={offer.startDate}
           onChange={handleInputChange}
-          required/>
+          required
+        />
       </Form.Group>
 
       <Form.Group controlId="formOfferEndDate" className="mb-3">
@@ -167,7 +172,8 @@ const UpdateOfferForm = () => {
           name="endDate"
           value={offer.endDate}
           onChange={handleInputChange}
-          required/>
+          required
+        />
       </Form.Group>
 
       <div className="form-actions d-flex justify-content-between">
