@@ -65,18 +65,7 @@ const Login = () => {
           <span className="text-danger"> Password is required</span>
         )}
       </Form.Group>
-      <Form.Group controlId="userType">
-        <Form.Label>Login as</Form.Label>
-        <Form.Control as="select" {...register("userType", { required: true })} >
-          <option value="Food provider"> Food provider</option>
-          <option value="Food lover">Food lover</option>
-          </Form.Control>
-        {errors.userType && errors.userType.type === "required" && (
-        <span className="text-danger"> user type is required</span>
-      )}
-      </Form.Group>
-
-
+     
 
       <Button variant="primary" type="submit">
         Login
