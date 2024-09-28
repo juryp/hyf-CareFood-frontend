@@ -11,17 +11,18 @@ const ReservationListPage = () => {
     startDate: "2024-09-14",
     endDate: "2024-09-14",
   };
+  const user = JSON.parse(localStorage.getItem("user")); // Retrieve user data
 
   const handleUserReservations = async () => {
     try {
-      const res = await reservationApi.getUser(1, params);
+      const res = await reservationApi.getUser(user?.id, params);
       const data = await res.json();
       console.log(data);
       setReservations(data);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     handleUserReservations();
@@ -29,15 +30,15 @@ const ReservationListPage = () => {
 
   // Separate reservations into "Open" (Reserved, Ready for pickup) and "Archive" (Delivered)
   const openReservations = reservations.filter(
-    (reservation) => reservation.status !== 'Delivered'
+    (reservation) => reservation.status !== "Delivered"
   );
   const archiveReservations = reservations.filter(
-    (reservation) => reservation.status === 'Delivered'
+    (reservation) => reservation.status === "Delivered"
   );
 
   // Handle navigation to details page and passing reservation data
   const handleClick = (reservation) => {
-    navigate('/reservation-detail', { state: { reservation } });
+    navigate("/reservation-detail", { state: { reservation } });
   };
 
   return (
@@ -52,7 +53,8 @@ const ReservationListPage = () => {
             onClick={() => handleClick(reservation)}
           >
             <div className="reservation-row">
-              <span>{reservation.provider_name}</span> - <span>{reservation.type}</span>
+              <span>{reservation.provider_name}</span> -{" "}
+              <span>{reservation.type}</span>
             </div>
             <div className="reservation-row">
               <span>{reservation.status}</span>
@@ -62,7 +64,9 @@ const ReservationListPage = () => {
       ) : (
         <div>
           <p>You don't have open reservations at the moment...</p>
-          <button onClick={() => navigate('/offerslover')}>Check out to day's offers</button>
+          <button onClick={() => navigate("/offerslover")}>
+            Check out to day's offers
+          </button>
         </div>
       )}
 
@@ -76,7 +80,8 @@ const ReservationListPage = () => {
             onClick={() => handleClick(reservation)}
           >
             <div className="reservation-row">
-              <span>{reservation.provider_name}</span> - <span>{reservation.type}</span>
+              <span>{reservation.provider_name}</span> -{" "}
+              <span>{reservation.type}</span>
             </div>
             <div className="reservation-row">
               <span>{reservation.status}</span>
