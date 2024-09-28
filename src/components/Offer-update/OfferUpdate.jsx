@@ -62,26 +62,28 @@ const UpdateOfferForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    // Ensure that Diabetic is mapped correctly here
     const boxTypeMap = {
       "Standard": 1,
       "Vegan": 2,
       "Gluten-Free": 3,
-      // Add other types if needed, based on your backend's box type mappings
-    };
+      "Diabetic": 4,
+     };
 
     const requestData = {
-      provider_id: 3, // Assuming provider ID is 3
-      date: offer.startDate, // Using start date from the form
-      type: boxTypeMap[offer.boxType] || 1, // Map box type to the correct value
+      provider_id: 3, 
+      date: offer.startDate, 
+      type: boxTypeMap[offer.boxType] || 1,
       quantity: offer.quantity,
       description: offer.description,
-      pickup_time: offer.pickup_time, // From the form
+      pickup_time: offer.pickup_time, 
     };
+
     try {
       const response = await axios.put('http://cfood.obereg.net:5000/boxes/add-boxes', requestData);
       if (response.status === 200) {
         alert('Offer updated successfully!');
-        navigate("/"); // Redirect after successful update
+        navigate("/"); 
       } else {
         alert('Something went wrong. Please try again.');
       }
@@ -95,12 +97,13 @@ const UpdateOfferForm = () => {
     setOffer({
       name: '',
       description: '',
-      startDate: "2024-09-14", // Reset to default
-      endDate: "2024-09-14", // Reset to default
-      boxType: 'Standard', // Reset box type to default
-      pickup_time: "17:00:00", // Reset pickup time to default
-      quantity: 1, // Reset quantity to default
+      startDate: "2024-09-14", 
+      endDate: "2024-09-14",
+      boxType: 'Standard', 
+      pickup_time: "17:00:00",
+      quantity: 1,
     });
+
     alert('Offer update canceled');
     navigate("/"); 
   };
@@ -116,8 +119,8 @@ const UpdateOfferForm = () => {
           name="boxType"
           value={offer.boxType}
           onChange={handleInputChange}
-          required
-        >
+          required >
+
           {boxes.map((box) => (
             <option key={box.type} value={box.type}>{box.type}</option>
           ))}
@@ -147,7 +150,8 @@ const UpdateOfferForm = () => {
           value={offer.quantity}
           onChange={handleInputChange}
           min="1" // Minimum quantity is 1
-          required/>
+          required
+        />
       </Form.Group>
 
       <Form.Group controlId="formOfferStartDate" className="mb-3">
@@ -157,7 +161,7 @@ const UpdateOfferForm = () => {
           name="startDate"
           value={offer.startDate}
           onChange={handleInputChange}
-          required/>
+          required />
       </Form.Group>
 
       <Form.Group controlId="formOfferEndDate" className="mb-3">
@@ -167,7 +171,7 @@ const UpdateOfferForm = () => {
           name="endDate"
           value={offer.endDate}
           onChange={handleInputChange}
-          required/>
+          required />
       </Form.Group>
 
       <div className="form-actions d-flex justify-content-between">
