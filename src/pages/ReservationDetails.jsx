@@ -17,7 +17,6 @@ const ReservationDetails = () => {
       const response = await axios.get(
         `http://cfood.obereg.net:5000/reservations/provider/3?startDate=today&Issue=true`
       );
-      // const data = await response.json();
       response.data.map((r) => {
         if (r.id.toString() === id) {
           setReservations(r);
