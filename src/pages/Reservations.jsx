@@ -10,17 +10,11 @@ import api from "../api/reservations";
 
 const Reservations = () => {
   const [reservations, setReservations] = useState([]);
-  const today = new Date().toISOString().split("T")[0];
   const params = {
-    startDate: today,
-    endDate: today,
+    startDate: "2024-09-14",
+    endDate: "2024-09-14",
     Issue: true,
   };
-  // const params = {
-  //   startDate: "2024-09-14",
-  //   endDate: "2024-09-14",
-  //   Issue: true,
-  // };
 
   const navigate = useNavigate();
 
