@@ -16,10 +16,6 @@ const OfferDetails = () => {
     startDate: today,
     endDate: today,
   };
-  // const params = {
-  //   startDate: "2024-09-14",
-  //   endDate: "2024-09-14",
-  // };
 
   const handleOfferDetails = async () => {
     try {
@@ -30,7 +26,7 @@ const OfferDetails = () => {
         setProviderOffers([offer]);
       }
     } catch (error) {
-      return `${error.message} - There is an error fetching provider offers`;
+      console.error(error);
     }
   };
 

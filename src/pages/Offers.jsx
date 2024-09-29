@@ -16,11 +16,6 @@ const Offers = () => {
   const [provider, setProvider] = useState();
   const providers = JSON.parse(localStorage.getItem("user"));
 
-  // const params = {
-  //   startDate: "2024-09-14",
-  //   endDate: "2024-09-14",
-  // };
-
   const fetchProviderOffers = async () => {
     try {
       const response = await api.get({
@@ -32,8 +27,7 @@ const Offers = () => {
       console.log(offer);
       setProviderOffers(offer);
     } catch (error) {
-      console.log(error);
-      return `${error.message} - There is an error fetching provider offers.`;
+      console.error(error);
     }
   };
 

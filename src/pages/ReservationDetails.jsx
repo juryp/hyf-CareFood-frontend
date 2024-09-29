@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
-import api from "../api/reservations";
+import axios from "axios";
 import back_icon from "../assets/back_icon.png";
 import reservation_icon from "../assets/reservation_icon.png";
 import offers_icon from "../assets/offers_icon.png";
@@ -9,22 +9,15 @@ import logout_icon from "../assets/logout_icon.png";
 const ReservationDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const today = new Date().toISOString().split("T")[0];
-  const params = {
-    startDate: today,
-    endDate: today,
-  };
-  // const params = {
-  //   startDate: "2024-09-14",
-  //   endDate: "2024-09-14",
-  // };
+
   const [reservations, setReservations] = useState({});
 
   const handleReservationDetails = async () => {
     try {
-      const response = await api.get(3, { params });
-      const data = await response.json();
-      data.map((r) => {
+      const response = await axios.get(
+        `http://cfood.obereg.net:5000/reservations/provider/3?startDate=today&Issue=true`
+      );
+      response.data.map((r) => {
         if (r.id.toString() === id) {
           setReservations(r);
         }
@@ -35,44 +28,13 @@ const ReservationDetails = () => {
   };
 
   const handleReadyStatus = async () => {
-    await api.post(
-      `ready/${id}`
-      // params, http://cfood.obereg.net:5000/reservations/ready/104
-      // {
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      // }
-    );
-    // setReservations(response.data);
+    await axios.post(`ready/${id}`);
   };
 
   const handleDeliveredStatus = async () => {
-    await api.post(
-      `issue/${id}`
-      //   params,
-      //   {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   }
-    );
-    // setReservations(response.data);
+    await axios.post(`issue/${id}`);
+    navigate("/reservations");
   };
-
-  // const updateStatus = () => {
-  //   console.log("status", reservations);
-  //   if (reservations.status === "Reserved") {
-  //     setReservations((prev) => ({ ...prev, status: "Ready for Pickup" }));
-  //     handleReadyStatus();
-  //     console.log("status2", reservations);
-  //   }
-  // };
-
-  // const updateStatus2 = () => {
-  //   setReservations((prev) => ({ ...prev, status: "Delivered" }));
-  //   handleDeliveredStatus();
-  // };
 
   const handleButtonText = () => {
     if (reservations.status === "Reserved") {
