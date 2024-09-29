@@ -29,7 +29,6 @@ const router = createBrowserRouter([
     element: <Layout />, // Include navigation and content
     children: [
       { path: "/", element: <App /> }, // Home page
-      { path: "/recipes", element: <RecipesPage /> }, // Recipes page
       { path: "/login", element: <Login /> }, // Login page
       { path: "/register", element: <Register /> }, // Registration page
       { path: "/reservations", element: <Reservations /> }, // Food provider reservations page

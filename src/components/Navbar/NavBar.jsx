@@ -19,10 +19,6 @@ export default function Navigation() {
             <Nav.Link href="/" className="btn" style={{ marginRight: "1rem" }}>
               Home
             </Nav.Link>
-            <Nav.Link href="/recipes" className="btn">
-              Food Items
-            </Nav.Link>
-
             {isHomePage && (
               <div className="nav-buttons">
                 <Nav.Link
