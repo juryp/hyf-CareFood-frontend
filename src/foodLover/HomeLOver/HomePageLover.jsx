@@ -11,11 +11,14 @@ const HomePageLover = () => {
   const [user, setUser] = useState();
 
   // Function to fetch offers
+  const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+
+  // Function to fetch offers
   const handleOffers = async () => {
     try {
       const res = await offersApi.get({
-        startDate: "2024-09-14",
-        endDate: "2024-09-14",
+        startDate: today, // Use today's date dynamically
+        endDate: today, // Use today's date dynamically
       });
       const offersData = await res.json();
       setOffers(offersData);
@@ -29,8 +32,8 @@ const HomePageLover = () => {
   const handleReservations = async () => {
     try {
       const res = await reservationApi.getUser(users?.id, {
-        startDate: "2024-09-14",
-        endDate: "2024-09-14",
+        startDate: today, // Use today's date dynamically
+        endDate: today, // Use today's date dynamically
       });
       const reservationData = await res.json();
       setReservations(reservationData);
@@ -135,3 +138,9 @@ const HomePageLover = () => {
 };
 
 export default HomePageLover;
+
+
+
+
+
+
