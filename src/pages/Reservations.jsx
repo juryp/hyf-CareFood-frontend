@@ -6,19 +6,14 @@ import forward_icon from "../assets/forward.png";
 import reservation_icon from "../assets/reservation_icon.png";
 import offers_icon from "../assets/offers_icon.png";
 import logout_icon from "../assets/logout_icon.png";
-import api from "../api/reservations";
+import axios from "axios";
+// import api from "../api/reservations";
 
 const Reservations = () => {
   const [reservations, setReservations] = useState([]);
-  const today = new Date().toISOString().split("T")[0];
-  const params = {
-    startDate: today,
-    endDate: today,
-    Issue: true,
-  };
+  // const today = new Date().toISOString().split("T")[0];
   // const params = {
-  //   startDate: "2024-09-14",
-  //   endDate: "2024-09-14",
+  //   startDate: today,
   //   Issue: true,
   // };
 
@@ -29,14 +24,19 @@ const Reservations = () => {
   const [readyCount, setReadyCount] = useState(0);
   const [deliveredCount, setDeliveredCount] = useState(0);
 
+  const [provider, setProvider] = useState();
+  const providers = JSON.parse(localStorage.getItem("user"));
+
   const handleReservations = async () => {
     try {
-      const response = await api.get(3, params);
-      const data = await response.json();
-      console.log(data);
-      setReservations(data);
+      const response = await axios.get(
+        `http://cfood.obereg.net:5000/reservations/provider/${providers.id}?startDate=today&Issue=true`
+      );
+      // const data = await response.json();
+      console.log(response.data);
+      setReservations(response.data);
     } catch (error) {
-      return `${error.message} -  There is an error fetching reservations made.`;
+      console.log(error);
     }
   };
 
@@ -49,15 +49,16 @@ const Reservations = () => {
     return groups;
   }, {});
 
-  const groupedReservations = Object.keys(groupedData).map((date) => {
-    return {
-      date,
-      reservations: groupedData[date],
-    };
-  });
+  const groupedReservations = Object.keys(groupedData)
+    .sort((a, b) => new Date(b) - new Date(a))
+    .map((date) => {
+      return {
+        date,
+        reservations: groupedData[date],
+      };
+    });
 
   useEffect(() => {
-    console.log("updated");
     const reserved = reservations.filter(
       (item) => item.status === "Reserved"
     ).length;
@@ -67,19 +68,25 @@ const Reservations = () => {
     const delivered = reservations.filter(
       (item) => item.status === "Delivered"
     ).length;
-    console.log("updated2", reserved, ready, delivered);
+
     setReservedCount(reserved);
     setReadyCount(ready);
     setDeliveredCount(delivered);
   }, [reservations]);
 
   useEffect(() => {
-    handleReservations();
+    if (localStorage.getItem("user")) {
+      setProvider(JSON.parse(localStorage.getItem("user")));
+      handleReservations();
+    }
   }, []);
 
   return (
     <div className="content">
-      <h2 className="heading"> Reservations - Food Provider </h2>
+      <h2 className="heading">
+        {" "}
+        Reservations for <small> {provider ? provider.name : null} </small>{" "}
+      </h2>
       <div className="count-container">
         <div>
           <p className="count"> {reservedCount} </p>
