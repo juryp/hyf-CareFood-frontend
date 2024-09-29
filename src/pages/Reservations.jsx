@@ -83,7 +83,7 @@ const Reservations = () => {
     <div className="content">
       <h2 className="heading">
         {" "}
-        Reservations for <small> {provider ? provider.name : null} </small>{" "}
+        Reservations: <small> {provider ? provider.name : null} </small>{" "}
       </h2>
       <div className="count-container">
         <div>
