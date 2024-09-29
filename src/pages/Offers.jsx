@@ -12,10 +12,9 @@ const Offers = () => {
   const [providerOffers, setProviderOffers] = useState([]);
 
   const today = new Date().toISOString().split("T")[0];
-  const params = {
-    startDate: today,
-    endDate: today,
-  };
+
+  const [provider, setProvider] = useState();
+  const providers = JSON.parse(localStorage.getItem("user"));
 
   // const params = {
   //   startDate: "2024-09-14",
@@ -24,24 +23,35 @@ const Offers = () => {
 
   const fetchProviderOffers = async () => {
     try {
-      const response = await api.get(params);
+      const response = await api.get({
+        startDate: today,
+        endDate: today,
+        providerId: providers?.id,
+      });
       const offer = await response.json();
       console.log(offer);
       setProviderOffers(offer);
     } catch (error) {
+      console.log(error);
       return `${error.message} - There is an error fetching provider offers.`;
     }
   };
 
   useEffect(() => {
-    fetchProviderOffers();
+    if (localStorage.getItem("user")) {
+      setProvider(JSON.parse(localStorage.getItem("user")));
+      fetchProviderOffers();
+    }
   }, []);
 
   return (
     <div className="content">
       <div className="title-wrapper">
-        <h2 className="heading"> Offers - Food Provider </h2>
-        <p onClick={() => navigate("/Offer")}> New Offer </p>
+        <h2 className="heading">
+          {" "}
+          Welcome <small>{provider ? provider.name : null}</small>{" "}
+        </h2>
+        <p onClick={() => navigate("/Offer-update")}> New Offer </p>
       </div>
       <div>
         <ul>
