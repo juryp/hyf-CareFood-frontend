@@ -1,4 +1,4 @@
-/* reservationListPage.css */
+reservationListPage.css
 
 body {
   font-family: 'Arial', sans-serif;
@@ -25,10 +25,9 @@ h2 {
   padding-bottom: 10px;
 }
 
-.reservation-item {
-  background-color: #deeeda;
+.reservation-item1 {
   padding: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 75px;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease;
