@@ -16,10 +16,6 @@ const OfferDetails = () => {
     startDate: today,
     endDate: today,
   };
-  // const params = {
-  //   startDate: "2024-09-14",
-  //   endDate: "2024-09-14",
-  // };
 
   const handleOfferDetails = async () => {
     try {

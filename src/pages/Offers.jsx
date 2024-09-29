@@ -16,11 +16,6 @@ const Offers = () => {
   const [provider, setProvider] = useState();
   const providers = JSON.parse(localStorage.getItem("user"));
 
-  // const params = {
-  //   startDate: "2024-09-14",
-  //   endDate: "2024-09-14",
-  // };
-
   const fetchProviderOffers = async () => {
     try {
       const response = await api.get({

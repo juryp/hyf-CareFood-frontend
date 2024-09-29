@@ -9,11 +9,6 @@ import logout_icon from "../assets/logout_icon.png";
 const ReservationDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  // const today = new Date().toISOString().split("T")[0];
-  // const params = {
-  //   startDate: today,
-  //   Issue: true,
-  // };
 
   const [reservations, setReservations] = useState({});
 
