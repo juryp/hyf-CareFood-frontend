@@ -7,10 +7,13 @@ import ListOfFoods from "./components/Listoffoods/ListOfFoods";
 function App() {
   const [offers, setOffers] = useState([]);
 
+  const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+
   const params = {
-    startDate: "2024-09-14",
-    endDate: "2024-09-14",
+    startDate: today, // Use today's date
+    endDate: today, // Use today's date
   };
+
   useEffect(() => {
     getOffers();
 
@@ -19,6 +22,7 @@ function App() {
     return () => clearInterval(intervalId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   const getOffers = async () => {
     try {
       const res = await offersApi.get(params);
