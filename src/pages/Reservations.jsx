@@ -7,7 +7,6 @@ import reservation_icon from "../assets/reservation_icon.png";
 import offers_icon from "../assets/offers_icon.png";
 import logout_icon from "../assets/logout_icon.png";
 import axios from "axios";
-// import api from "../api/reservations";
 
 const Reservations = () => {
   const [reservations, setReservations] = useState([]);

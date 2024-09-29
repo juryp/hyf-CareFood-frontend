@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
-// import api from "../api/reservations";
 import axios from "axios";
 import back_icon from "../assets/back_icon.png";
 import reservation_icon from "../assets/reservation_icon.png";
