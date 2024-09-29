@@ -5,19 +5,22 @@ import { useNavigate } from "react-router";
 import "./offerUpdate.css";
 
 const UpdateOfferForm = () => {
+  const navigate = useNavigate();
+  const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+
   const [offer, setOffer] = useState({
-    name: '',            // Initialize name
+    name: '',
     description: '',
-    pickup_time: "17:00:00",
-    startDate: "2024-09-14",
-    endDate: "2024-09-14",
+    date: today,
     boxType: "Standard", // Default box type
-    quantity: 1,         // Initialize quantity
+    quantity: 1,         // Default quantity
+    pickup_time: "17:30:00", // Default pickup time
   });
 
   const [boxes, setBoxes] = useState([]);
-  const navigate = useNavigate(); 
+  const [errors, setErrors] = useState({});
 
+  // Fetch boxes data
   useEffect(() => {
     const fetchOfferData = async () => {
       try {
@@ -43,14 +46,26 @@ const UpdateOfferForm = () => {
     fetchOfferData();
   }, []);
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
+  // Validation function
+  const validate = () => {
+    const newErrors = {};
+    if (!offer.name) newErrors.name = "Box Type is mandatory";
+    if (!offer.description) newErrors.description = "Description is mandatory";
+    if (!offer.date) newErrors.date = "Date is mandatory";
+    if (!offer.pickup_time) newErrors.pickup_time = "Pickup time is mandatory";
+    if (offer.quantity <= 0) newErrors.quantity = "Quantity must be greater than 0";
+    return newErrors;
+  };
+
+  // Handle form input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
     setOffer({ ...offer, [name]: value });
 
     if (name === "boxType") {
-      const selectedBox = boxes.find(box => box.type === value);
+      const selectedBox = boxes.find((box) => box.type === value);
       if (selectedBox) {
-        setOffer(prevOffer => ({
+        setOffer((prevOffer) => ({
           ...prevOffer,
           description: selectedBox.description,
         }));
@@ -58,139 +73,123 @@ const UpdateOfferForm = () => {
     }
   };
 
-  // Handle the form submission with PUT request
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-  
-    const boxTypeMap = {
-      "Standard": 1,
-      "Vegan": 2,
-      "Diabetic": 3,
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newErrors = validate();
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+    } else {
+      const boxTypeMap = {
+        "Standard": 1,
+        "Vegan": 2,
+        "Diabetic": 3,
       };
-  
-    const requestData = {
-      provider_id: 3, // Assuming provider ID is 3
-      date: offer.startDate, // Using start date from the form
-      type: boxTypeMap[offer.boxType] || 1, // Map box type to the correct value
-      quantity: offer.quantity,
-      description: offer.description,
-      pickup_time: offer.pickup_time, // From the form
-    };
-  
-    try {
-      const response = await axios.put('http://cfood.obereg.net:5000/boxes/add-boxes', requestData);
-      if (response.status === 200) {
-        alert('Offer updated successfully!');
-        navigate("/offers"); // Redirect after successful update
-      } else {
-        alert('Something went wrong. Please try again.');
-      }
-    } catch (error) {
-      if (error.response) {
-        // Backend responded with an error
-        console.error('Response error:', error.response.data);
-        console.error('Response status:', error.response.status);
-        console.error('Response headers:', error.response.headers);
-        alert(`Error: ${error.response.data.message || 'Unknown server error.'}`);
-      } else if (error.request) {
-        // Request was made but no response received
-        console.error('No response received:', error.request);
-        alert('No response from server. Please try again later.');
-      } else {
-        // Other errors (such as setting up the request)
-        console.error('Error setting up request:', error.message);
-        alert(`Error: ${error.message}`);
+
+      const requestData = {
+        provider_id: 3, // Assuming provider ID is 3
+        date: offer.date, // Correct field name
+        type: boxTypeMap[offer.boxType] || 1, // Box type mapped
+        quantity: offer.quantity,
+        description: offer.description,
+        pickup_time: offer.pickup_time,
+      };
+
+      try {
+        const response = await axios.put('http://cfood.obereg.net:5000/boxes/add-boxes', requestData);
+        if (response.status === 200) {
+          alert('Offer updated successfully!');
+          navigate("/offers"); // Redirect to offers page
+        } else {
+          alert('Something went wrong. Please try again.');
+        }
+      } catch (error) {
+        console.error("Error updating the offer:", error);
+        alert('An error occurred. Please try again.');
       }
     }
   };
-  
-
-  const handleCancel = () => {
-    setOffer({
-      name: '',
-      description: '',
-      startDate: "2024-09-14", 
-      endDate: "2024-09-14",
-      boxType: 'Standard', 
-      pickup_time: "17:00:00",
-      quantity: 1,
-    });
-
-    alert('Offer update canceled');
-    navigate("/"); 
-  };
 
   return (
-    <Form onSubmit={handleSubmit} className="update-offer-form">
-      <h2>Update an Offer</h2>
+    <div className="container mt-5">
+      <h1 className="mb-4">Update Offer</h1>
+      <Form onSubmit={handleSubmit}>
 
-      <Form.Group controlId="formOfferType" className="mb-3">
-        <Form.Label>Box Type <span className="mandatory">*</span></Form.Label>
-        <Form.Control
-          as="select"
-          name="boxType"
-          value={offer.boxType}
-          onChange={handleInputChange}
-          required >
+        <Form.Group controlId="formBoxType" className="mb-3">
+          <Form.Label>Box Type</Form.Label>
+          <Form.Control
+            as="select"
+            name="boxType"
+            value={offer.boxType}
+            onChange={handleChange}
+          >
+            {boxes.map((box) => (
+              <option key={box.type} value={box.type}>
+                {box.type}
+              </option>
+            ))}
+          </Form.Control>
+          {errors.name && <p className="text-danger">{errors.name}</p>}
+        </Form.Group>
 
-          {boxes.map((box) => (
-            <option key={box.type} value={box.type}>{box.type}</option>
-          ))}
-        </Form.Control>
-      </Form.Group>
+        <Form.Group controlId="formDescription" className="mb-3">
+          <Form.Label>Description</Form.Label>
+          <Form.Control
+            as="textarea"
+            name="description"
+            value={offer.description}
+            onChange={handleChange}
+            placeholder="Description of the offer"
+          />
+          {errors.description && <p className="text-danger">{errors.description}</p>}
+        </Form.Group>
 
-      <Form.Group controlId="formOfferDescription" className="mb-3">
-        <Form.Label>Description <span className="mandatory">*</span></Form.Label>
-        <Form.Control
-          as="textarea"
-          name="description"
-          value={offer.description}
-          onChange={handleInputChange}
-          placeholder="Offer Description"
-          required
-        />
-        <Form.Text className="text-muted">
-          Description of the selected box type will appear here.
-        </Form.Text>
-      </Form.Group>
+        <div className="mb-3">
+          <label htmlFor="date" className="form-label">Date</label>
+          <input
+            type="date"
+            id="date"
+            name="date"
+            className="form-control"
+            value={offer.date}
+            onChange={handleChange}
+          />
+          {errors.date && <p className="text-danger">{errors.date}</p>}
+        </div>
 
-      <Form.Group controlId="formOfferQuantity" className="mb-3">
-        <Form.Label>Quantity <span className="mandatory">*</span></Form.Label>
-        <Form.Control
-          type="number"
-          name="quantity"
-          value={offer.quantity}
-          onChange={handleInputChange}
-          min="1" // Minimum quantity is 1
-          required
-        />
-      </Form.Group>
+        <Form.Group controlId="formQuantity" className="mb-3">
+          <Form.Label>Quantity</Form.Label>
+          <Form.Control
+            type="number"
+            name="quantity"
+            value={offer.quantity}
+            onChange={handleChange}
+            min="1"
+          />
+          {errors.quantity && <p className="text-danger">{errors.quantity}</p>}
+        </Form.Group>
 
-      <Form.Group controlId="formOfferStartDate" className="mb-3">
-        <Form.Label>Start Date <span className="mandatory">*</span></Form.Label>
-        <Form.Control
-          type="date"
-          name="startDate"
-          value={offer.startDate}
-          onChange={handleInputChange}
-          required />
-      </Form.Group>
+        <Form.Group controlId="formPickupTime" className="mb-3">
+          <Form.Label>Pickup Time</Form.Label>
+          <Form.Control
+            type="time"
+            name="pickup_time"
+            value={offer.pickup_time}
+            onChange={handleChange}
+          />
+          {errors.pickup_time && <p className="text-danger">{errors.pickup_time}</p>}
+        </Form.Group>
 
-      <Form.Group controlId="formOfferEndDate" className="mb-3">
-        <Form.Label>End Date <span className="mandatory">*</span></Form.Label>
-        <Form.Control
-          type="date"
-          name="endDate"
-          value={offer.endDate}
-          onChange={handleInputChange}
-          required />
-      </Form.Group>
-
-      <div className="form-actions d-flex justify-content-between">
-        <Button variant="secondary" onClick={handleCancel}>Cancel</Button>
-        <Button variant="primary" type="submit">Save</Button>
-      </div>
-    </Form>
+        <div className="form-actions d-flex justify-content-between">
+          <Button variant="secondary" onClick={() => navigate("/offers")}>
+            Cancel
+          </Button>
+          <Button variant="primary" type="submit">
+            Update
+          </Button>
+        </div>
+      </Form>
+    </div>
   );
 };
 
