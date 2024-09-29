@@ -86,7 +86,7 @@ const HomePageLover = () => {
   return (
     <div className="homepage-lover">
       <div className="offers-summary">
-        <h2>Welcome, :{user ? user.login : null}!</h2>
+        <h2>Welcome, :{user ? user.name : null}!</h2>
         <p>Today</p>
         <div className="offers-totals">
           <div>
