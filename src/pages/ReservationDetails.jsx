@@ -28,11 +28,11 @@ const ReservationDetails = () => {
   };
 
   const handleReadyStatus = async () => {
-    await axios.post(`ready/${id}`);
+    await axios.post(`http://cfood.obereg.net:5000/reservations/ready/${id}`);
   };
 
   const handleDeliveredStatus = async () => {
-    await axios.post(`issue/${id}`);
+    await axios.post(`http://cfood.obereg.net:5000/reservations/issue/${id}`);
     navigate("/reservations");
   };
 
