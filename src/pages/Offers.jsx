@@ -27,8 +27,7 @@ const Offers = () => {
       console.log(offer);
       setProviderOffers(offer);
     } catch (error) {
-      console.log(error);
-      return `${error.message} - There is an error fetching provider offers.`;
+      console.error(error);
     }
   };
 

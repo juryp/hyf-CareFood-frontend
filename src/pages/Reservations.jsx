@@ -35,7 +35,7 @@ const Reservations = () => {
       console.log(response.data);
       setReservations(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
