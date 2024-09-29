@@ -35,7 +35,6 @@ const ReservationDetails = () => {
   };
 
   const handleReadyStatus = async () => {
-    console.log("handle", id);
     await api.post(
       `ready/${id}`
       // params, http://cfood.obereg.net:5000/reservations/ready/104
