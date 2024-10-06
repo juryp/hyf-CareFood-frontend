@@ -23,7 +23,9 @@ const Login = () => {
         if (res.data.id){
           localStorage.setItem('user',JSON.stringify(res.data))
         }
-        if (res.data.role==="provider"){
+        if (res.data.role === "provider") {
+          console.log("Provider ID: ", res.data.provider_id); 
+           localStorage.setItem("provider_id", res.data.id);
           navigate('/offers')
         }
         if (res.data.role==="user"){
