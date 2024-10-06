@@ -79,7 +79,7 @@ const ReservationListPage = () => {
 
   return (
     <div className="content">
-      <h2 className="heading">Reservations - Food Provider</h2>
+      <h2 className="heading">Reservations - {user ? user.name : null}</h2>
       <div className="count-container">
         <div>
           <p className="count">{reservedCount}</p>

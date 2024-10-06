@@ -8,12 +8,15 @@ const UpdateOfferForm = () => {
   const navigate = useNavigate();
   const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
 
+  const provider_id = localStorage.getItem("provider_id");
+  console.log("Retrieved Provider ID from localStorage: ", provider_id); // Add this line
+
   const [offer, setOffer] = useState({
-    name: '',
-    description: '',
+    name: "",
+    description: "",
     date: today,
     boxType: "Standard", // Default box type
-    quantity: 1,         // Default quantity
+    quantity: 1, // Default quantity
     pickup_time: "17:30:00", // Default pickup time
   });
 
@@ -24,14 +27,16 @@ const UpdateOfferForm = () => {
   useEffect(() => {
     const fetchOfferData = async () => {
       try {
-        const response = await axios.get('http://cfood.obereg.net:5000/boxes/get-boxes/1');
+        const response = await axios.get(
+          `http://cfood.obereg.net:5000/boxes/get-boxes/${provider_id}`
+        );
         const data = response.data;
 
         if (data && data.boxes && data.boxes.length > 0) {
           setBoxes(data.boxes);
-          const standardBox = data.boxes.find(box => box.type === 'Standard');
+          const standardBox = data.boxes.find((box) => box.type === "Standard");
           if (standardBox) {
-            setOffer(prevOffer => ({
+            setOffer((prevOffer) => ({
               ...prevOffer,
               name: standardBox.type,
               description: standardBox.description,
@@ -39,7 +44,7 @@ const UpdateOfferForm = () => {
           }
         }
       } catch (error) {
-        console.error('Error fetching the offer data:', error);
+        console.error("Error fetching the offer data:", error);
       }
     };
 
@@ -53,7 +58,8 @@ const UpdateOfferForm = () => {
     if (!offer.description) newErrors.description = "Description is mandatory";
     if (!offer.date) newErrors.date = "Date is mandatory";
     if (!offer.pickup_time) newErrors.pickup_time = "Pickup time is mandatory";
-    if (offer.quantity <= 0) newErrors.quantity = "Quantity must be greater than 0";
+    if (offer.quantity <= 0)
+      newErrors.quantity = "Quantity must be greater than 0";
     return newErrors;
   };
 
@@ -81,31 +87,35 @@ const UpdateOfferForm = () => {
       setErrors(newErrors);
     } else {
       const boxTypeMap = {
-        "Standard": 1,
-        "Vegan": 2,
-        "Diabetic": 3,
+        Standard: 1,
+        Vegan: 2,
+        Diabetic: 3,
       };
 
       const requestData = {
-        provider_id: 3, // Assuming provider ID is 3
+        provider_id: provider_id, // Assuming provider ID is 3
         date: offer.date, // Correct field name
         type: boxTypeMap[offer.boxType] || 1, // Box type mapped
         quantity: offer.quantity,
         description: offer.description,
         pickup_time: offer.pickup_time,
       };
+      console.log(provider_id);
 
       try {
-        const response = await axios.put('http://cfood.obereg.net:5000/boxes/add-boxes', requestData);
+        const response = await axios.put(
+          "http://cfood.obereg.net:5000/boxes/add-boxes",
+          requestData
+        );
         if (response.status === 200) {
-          alert('Offer updated successfully!');
+          alert("Offer updated successfully!");
           navigate("/offers"); // Redirect to offers page
         } else {
-          alert('Something went wrong. Please try again.');
+          alert("Something went wrong. Please try again.");
         }
       } catch (error) {
         console.error("Error updating the offer:", error);
-        alert('An error occurred. Please try again.');
+        alert("An error occurred. Please try again.");
       }
     }
   };
@@ -114,7 +124,6 @@ const UpdateOfferForm = () => {
     <div className="container mt-5">
       <h1 className="mb-4">Update Offer</h1>
       <Form onSubmit={handleSubmit}>
-
         <Form.Group controlId="formBoxType" className="mb-3">
           <Form.Label>Box Type</Form.Label>
           <Form.Control
@@ -141,11 +150,15 @@ const UpdateOfferForm = () => {
             onChange={handleChange}
             placeholder="Description of the offer"
           />
-          {errors.description && <p className="text-danger">{errors.description}</p>}
+          {errors.description && (
+            <p className="text-danger">{errors.description}</p>
+          )}
         </Form.Group>
 
         <div className="mb-3">
-          <label htmlFor="date" className="form-label">Date</label>
+          <label htmlFor="date" className="form-label">
+            Date
+          </label>
           <input
             type="date"
             id="date"
@@ -177,7 +190,9 @@ const UpdateOfferForm = () => {
             value={offer.pickup_time}
             onChange={handleChange}
           />
-          {errors.pickup_time && <p className="text-danger">{errors.pickup_time}</p>}
+          {errors.pickup_time && (
+            <p className="text-danger">{errors.pickup_time}</p>
+          )}
         </Form.Group>
 
         <div className="form-actions d-flex justify-content-between">
